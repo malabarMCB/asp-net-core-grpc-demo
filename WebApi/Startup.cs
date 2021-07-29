@@ -17,6 +17,7 @@ namespace WebApi
             {
                 x.EnableDetailedErrors = true;
             });
+            services.AddGrpcReflection();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -32,6 +33,11 @@ namespace WebApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcService<Service>();
+                if (env.IsDevelopment())
+                {
+                    endpoints.MapGrpcReflectionService();
+                }
+
                 endpoints.MapGet("/", async context => { await context.Response.WriteAsync("Hello World!"); });
             });
         }
