@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option csharp_namespace = "WebApi.Services";
+
+import "enums.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+service ReadingService {
+	rpc AddReading (ReadingMessage) returns (StatusMessage);
+	rpc SendDiagnostics (stream ReadingMessage) returns (google.protobuf.Empty);		
+}
+
+message ReadingPacket {
+	repeated ReadingMessage readings = 1;
+	string notes = 3;
+	ReadingStatus successful = 4;
+}
+
+message ReadingMessage {
+	int32 customer = 1;
+	int32 readingValue = 2;
+	google.protobuf.Timestamp readingTime = 5;
+	reserved 3, 4;
+}
+
+message StatusMessage {
+	string message = 1;
+	ReadingStatus success = 2;
+}
